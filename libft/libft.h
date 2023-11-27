@@ -6,7 +6,7 @@
 /*   By: frapp <frapp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/05 22:22:26 by frapp             #+#    #+#             */
-/*   Updated: 2023/11/25 20:46:55 by frapp            ###   ########.fr       */
+/*   Updated: 2023/11/26 23:26:53 by frapp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,16 +82,16 @@ void	ft_lstclear(t_list **lst, void (*del)(void*));
 void	ft_lstiter(t_list *lst, void (*f)(void *));
 t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *));
 
-# ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 10000
+# ifndef GET_NEXT_LINE_BUFFER_SIZE
+#  define GET_NEXT_LINE_BUFFER_SIZE 10000
 # endif
 
 typedef struct s_file	t_file;
 
 struct s_file
 {
-	char	buffer[BUFFER_SIZE + 5];
-	char	buffer_copy[BUFFER_SIZE + 5];
+	char	buffer[GET_NEXT_LINE_BUFFER_SIZE + 5];
+	char	buffer_copy[GET_NEXT_LINE_BUFFER_SIZE + 5];
 	char	*output;
 	int		fd;
 	int		buffer1_chars;

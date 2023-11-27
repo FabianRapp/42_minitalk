@@ -1,44 +1,51 @@
 CC=cc
 #CFLAGS
-NAME1=client
-NAME2=server
-SERVER=server.c
-CLIENT=client.c
-S_NAME=server
-C_NAME=client
-SOURCES= 
-OBJECTS = $(SOURCES:.c=.o)
-LIBFT_DIR = ./libft
-LIBFT = libft.a
-LIBFT_PATH = $(LIBFT_DIR)/$(LIBFT)
+NAME=minitalk
+
+SERVER=server
+PATH_SERVER=./server_code/
+SOURCES_SERVER=server.c
+SOURCES_SERVER := $(SOURCES_SERVER:%=$(PATH_SERVER)%)
+OBJECTS_SERVER=$(SOURCES_SERVER:.c=.o)
+LIB_SERVER=$(PATH_SERVER)lib_server.a
+
+CLIENT=client
+PATH_CLIENT=./client_code/
+SOURCES_CLIENT=client.c
+SOURCES_CLIENT := $(SOURCES_CLIENT:%=$(PATH_CLIENT)%)
+OBJECTS_CLIENT := $(SOURCES_CLIENT:.c=.o)
+LIB_CLIENT=$(PATH_CLIENT)lib_client.a
 
 
-all: $(NAME) clean
+LIBFT_DIR=./libft
+LIBFT=./libft/libft.a
+LIBFT_PATH=$(LIBFT_DIR)/$(LIBFT)
 
-$(NAME):libft $(OBJECTS) $(CLIENT) $(SERVER)
+all: $(NAME)
 
-$(SERVER):
-	$(CC) $(OBJECTS) $(LIBFT) $(SERVER) -o $(S_NAME)
+$(NAME): $(SERVER) $(CLIENT) clean
 
-$(CLIENT): libft $(OBJECTS)
-	$(CC) $(OBJECTS) $(LIBFT) $(CLIENT) -o $(C_NAME)
+$(SERVER): $(LIBFT) $(OBJECTS_SERVER)
+	ar rcs $(LIB_SERVER) $(OBJECTS_SERVER)
+	$(CC) $(LIBFT) $(LIB_SERVER) -o $(SERVER)
 
-$(LIBFT_PATH):
+$(CLIENT): $(LIBFT) $(OBJECTS_CLIENT)
+	ar rcs $(LIB_CLIENT) $(OBJECTS_CLIENT)
+	$(CC) $(LIBFT) $(LIB_CLIENT) -o $(CLIENT)
+
+$(LIBFT):
 	$(MAKE) -C $(LIBFT_DIR)
-	cp $(LIBFT_PATH) $(LIBFT)
-
-libft: $(LIBFT_PATH)
+#cp $(LIBFT_PATH) $(LIBFT)
 
 %.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-
-	rm -f $(OBJECTS)
+	rm -f $(OBJECTS_SERVER) $(OBJECTS_CLIENT)
 	$(MAKE) -C $(LIBFT_DIR) clean
 
 fclean: clean
-	rm -f $(NAME1) $(NAME2) $(LIBFT)
+	rm -f $(SERVER) $(CLIENT) $(LIBFT) $(LIB_SERVER) $(LIB_CLIENT)
 	rm -f a.out
 	$(MAKE) -C $(LIBFT_DIR) fclean
 

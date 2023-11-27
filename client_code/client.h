@@ -1,17 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   server.h                                           :+:      :+:    :+:   */
+/*   client.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: frapp <frapp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/06 00:25:14 by frapp             #+#    #+#             */
-/*   Updated: 2023/11/06 00:46:51 by frapp            ###   ########.fr       */
+/*   Created: 2023/11/26 19:50:26 by frapp             #+#    #+#             */
+/*   Updated: 2023/11/26 22:47:23 by frapp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minitalk.h"
+#include "../minitalk.h"
 
-#include "stdio.h"
-
-#include <unistd.h>
+typedef struct s_client
+{
+	pid_t			server_id;
+	unsigned char	*str;
+} t_client;
