@@ -28,6 +28,7 @@ $(NAME): $(SERVER) $(CLIENT) clean
 $(SERVER): $(LIBFT) $(OBJECTS_SERVER)
 	ar rcs $(LIB_SERVER) $(OBJECTS_SERVER)
 	$(CC) $(LIBFT) $(LIB_SERVER) -o $(SERVER)
+	cc main.c $(LIBFT) -o test
 
 $(CLIENT): $(LIBFT) $(OBJECTS_CLIENT)
 	ar rcs $(LIB_CLIENT) $(OBJECTS_CLIENT)
