@@ -6,11 +6,11 @@
 /*   By: frapp <frapp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/06 00:21:54 by frapp             #+#    #+#             */
-/*   Updated: 2023/11/28 08:11:26 by frapp            ###   ########.fr       */
+/*   Updated: 2023/11/28 09:47:58 by frapp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "server.h"
+#include "../minitalk.h"
 
 #define ZERO SIGUSR2
 #define ONE SIGUSR1
@@ -53,6 +53,7 @@ void	zero_buffer()
 
 void	catch_binary(int signum)
 {
+	// happens extremly raly but still needs a check early since this is the exit condition
 	if (zero_count >= 8)
 	{
 		if (signum == ONE)
@@ -72,26 +73,23 @@ void	catch_binary(int signum)
 		sigaction(ZERO, &act, NULL);
 		return ;
 	}
-	if (signum == ONE)
-	{
-		buffer[i] = buffer[i] | cmp;
-	}
-	else
-	{
-		zero_count++;
-	}
-	cmp >>= 1;
-	both_count++;
-	if (!cmp )
+	// happens every 8th call
+	if (!cmp)
 	{
 		i++;
 		cmp = 0x80;
-	}
-	if (both_count == 8 && zero_count != 8)
-	{
 		both_count = 0;
 		zero_count = 0;
 	}
+	//happens 50% of the time
+	if (signum == ONE)
+		buffer[i] = buffer[i] | cmp;
+	//happens 50% of the time
+	else
+		zero_count++;
+	cmp >>= 1;
+	both_count++;
+	// happens every 20 0000 calls
 	if (i == BUFFER_SIZE)
 	{
 		write(1, buffer, BUFFER_SIZE);
@@ -103,11 +101,9 @@ void	catch_binary(int signum)
 
 void	reset_connection(int sig, siginfo_t *siginfo, void *context)
 {
-	//ft_printf("reset_connection, zero count: %d\n", zero_count);
 	client_id = siginfo->si_pid;
 	if (zero_count >= 8)
 	{
-		//ft_printf("reset got ALL zero\n");
 		sigemptyset(&(act.sa_mask));
 		act.sa_flags = 0;
 		act.sa_handler = catch_binary;
@@ -120,26 +116,13 @@ void	reset_connection(int sig, siginfo_t *siginfo, void *context)
 		zero_buffer();
 		kill(client_id, NORMAL_OP);
 	}
-	// else if (sig == ONE && zero_count >= 8)
-	// {
-	// 	sigemptyset(&(act.sa_mask));
-	// 	act.sa_flags = 0;
-	// 	act.sa_handler = catch_binary;
-	// 	sigaction(ONE, &act, NULL);
-	// 	sigaction(ZERO, &act, NULL);
-	// 	zero_count = 0;
-	// 	both_count = 0;
-	// 	kill(client_id, NORMAL_OP);
-	// }
 	else if (sig == ONE)
 	{
-		//ft_printf("reset got one\n");
 		zero_count = 0;
 		kill(client_id, RESET);
 	}
 	else if (sig == ZERO)
 	{
-		//ft_printf("reset got zero\n");
 		zero_count++;
 		kill(client_id, RESET);
 	}
@@ -160,7 +143,7 @@ int main()
 	act.sa_sigaction = reset_connection;
 
 
-	zero_buffer();
+	//zero_buffer();
 	act.sa_flags = 0;
 	//act.sa_handler = ;
 

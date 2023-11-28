@@ -6,12 +6,11 @@
 /*   By: frapp <frapp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/06 00:53:33 by frapp             #+#    #+#             */
-/*   Updated: 2023/11/28 08:10:54 by frapp            ###   ########.fr       */
+/*   Updated: 2023/11/28 09:49:01 by frapp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "client.h"
-
+#include "../minitalk.h"
 
 
 #define ZERO SIGUSR2
@@ -51,7 +50,7 @@ void first_answer(int signum)
 		one_received = 1;
 	}
 }
-
+// has race condition but never happens and brings performence
 void	send_data_bin(int sig)
 {
 	if (0x80 & *(str))
@@ -115,9 +114,8 @@ void	reset_connection(void)
 	while (!zero_received)
 	{
 		kill(server_id, ZERO);
-		usleep(2000);
+		usleep(1000);
 	}
-	usleep(2000);
 	act.sa_handler = send_data_bin;
 	sigaction(ONE, &act, NULL);
 	sigaction(ZERO, &act, NULL);
