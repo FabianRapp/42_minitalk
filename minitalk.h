@@ -6,7 +6,7 @@
 /*   By: frapp <frapp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/06 00:25:38 by frapp             #+#    #+#             */
-/*   Updated: 2023/11/28 07:01:46 by frapp            ###   ########.fr       */
+/*   Updated: 2023/11/28 08:01:25 by frapp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 2048
+//#  define BUFFER_SIZE 5
 //#  define BUFFER_SIZE 2
 # endif
 
