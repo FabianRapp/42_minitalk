@@ -6,7 +6,7 @@
 /*   By: frapp <frapp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/06 00:53:33 by frapp             #+#    #+#             */
-/*   Updated: 2023/11/28 09:49:01 by frapp            ###   ########.fr       */
+/*   Updated: 2023/11/28 10:18:29 by frapp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,15 @@ void first_answer(int signum)
 // has race condition but never happens and brings performence
 void	send_data_bin(int sig)
 {
+	bool	one;
+	// if (0x80 & *(str))
+	// {
+	// 	one = true; 
+	// }
+	// else
+	// {
+	// 	one = false;
+	// }
 	if (0x80 & *(str))
 	{
 		kill(server_id, ONE);
@@ -78,6 +87,10 @@ void	send_data_bin(int sig)
 		}
 		i++;
 	}
+	// if (one)
+	// 	kill(server_id, ONE);
+	// else
+	// 	kill(server_id, ZERO);
 }
 
 

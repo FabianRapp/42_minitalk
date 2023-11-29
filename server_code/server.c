@@ -6,7 +6,7 @@
 /*   By: frapp <frapp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/06 00:21:54 by frapp             #+#    #+#             */
-/*   Updated: 2023/11/28 09:47:58 by frapp            ###   ########.fr       */
+/*   Updated: 2023/11/29 08:32:53 by frapp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,9 @@ unsigned char		both_count;
 pid_t				client_id;
 struct				sigaction act;
 
+#include <fcntl.h>
+int		fd;
+
 void	first_signal(int sig, siginfo_t *siginfo, void *context);
 void	reset_connection(int sig, siginfo_t *siginfo, void *context);
 
@@ -51,6 +54,8 @@ void	zero_buffer()
 	i = 0;
 }
 
+#define OUTPUTSTREAM 1
+
 void	catch_binary(int signum)
 {
 	// happens extremly raly but still needs a check early since this is the exit condition
@@ -58,14 +63,14 @@ void	catch_binary(int signum)
 	{
 		if (signum == ONE)
 		{
-			write(1, buffer, i);
-			write(1, "\n", 1);
+			write(OUTPUTSTREAM, buffer, i);
+			write(OUTPUTSTREAM, "\n", 1);
 		}
 		both_count = 0;
 		zero_count = 0;
 		i = 0;
 		cmp = 0x80;
-		zero_buffer();
+		//zero_buffer();
 		sigemptyset(&(act.sa_mask));
 		act.sa_flags = SA_SIGINFO;
 		act.sa_sigaction = reset_connection;
@@ -81,19 +86,22 @@ void	catch_binary(int signum)
 		both_count = 0;
 		zero_count = 0;
 	}
-	//happens 50% of the time
+	// each 50 % of the time
 	if (signum == ONE)
-		buffer[i] = buffer[i] | cmp;
-	//happens 50% of the time
+		buffer[i] |= cmp;
 	else
+	{
+		buffer[i] &= ~cmp;
 		zero_count++;
+	}
 	cmp >>= 1;
 	both_count++;
 	// happens every 20 0000 calls
 	if (i == BUFFER_SIZE)
 	{
-		write(1, buffer, BUFFER_SIZE);
-		zero_buffer();
+		write(OUTPUTSTREAM, buffer, BUFFER_SIZE);
+		//usleep(400);
+		//zero_buffer();
 		i = 0;
 	}
 	kill(client_id, NORMAL_OP);
@@ -104,6 +112,8 @@ void	reset_connection(int sig, siginfo_t *siginfo, void *context)
 	client_id = siginfo->si_pid;
 	if (zero_count >= 8)
 	{
+		//close (fd);
+		fd = open("test1.txt", O_WRONLY | O_TRUNC);
 		sigemptyset(&(act.sa_mask));
 		act.sa_flags = 0;
 		act.sa_handler = catch_binary;
@@ -113,7 +123,7 @@ void	reset_connection(int sig, siginfo_t *siginfo, void *context)
 		both_count = 0;
 		cmp = 0x80;
 		i = 0;
-		zero_buffer();
+		//zero_buffer();
 		kill(client_id, NORMAL_OP);
 	}
 	else if (sig == ONE)
@@ -133,6 +143,7 @@ int main()
 	pid_t id = getpid();
 	printf("%d\n", id);
 
+	fd = open("test1.txt", O_WRONLY | O_TRUNC);
 	zero_count = 0;
 	both_count = 0;
 	i = 0;
@@ -142,8 +153,6 @@ int main()
 	act.sa_flags = SA_SIGINFO;
 	act.sa_sigaction = reset_connection;
 
-
-	//zero_buffer();
 	act.sa_flags = 0;
 	//act.sa_handler = ;
 
