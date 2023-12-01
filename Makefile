@@ -1,5 +1,5 @@
 CC=cc
-#CFLAGS
+CFLAGS=-Wall -Wextra -Werror
 NAME=minitalk
 
 SERVER=server
@@ -20,7 +20,7 @@ LIBFT_PATH=$(LIBFT_DIR)/$(LIBFT)
 
 all: $(NAME)
 
-$(NAME): $(SERVER) $(CLIENT) clean
+$(NAME): $(SERVER) $(CLIENT)
 
 $(SERVER): $(LIBFT) $(OBJECTS_SERVER)
 	$(CC) $(LIBFT) $(OBJECTS_SERVER) -o $(SERVER)

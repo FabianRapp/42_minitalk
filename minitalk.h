@@ -6,23 +6,37 @@
 /*   By: frapp <frapp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/06 00:25:38 by frapp             #+#    #+#             */
-/*   Updated: 2023/12/01 06:53:25 by frapp            ###   ########.fr       */
+/*   Updated: 2023/12/01 07:10:30 by frapp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <signal.h>
-#include "libft/libft.h"
-#include <stdbool.h>
+#ifndef MINITALK_H
+# define MINITALK_H
 
+# include <unistd.h>
+# include <signal.h>
+# include "libft/libft.h"
+# include <stdbool.h>
 
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 2048
 # endif
 
-#define ZERO SIGUSR2
-#define ONE SIGUSR1
-#define RESET ONE
-#define NORMAL_OP ZERO
+# ifndef ZERO
+#  define ZERO SIGUSR2
+# endif
+
+# ifndef ONE
+#  define ONE SIGUSR1
+# endif
+
+# ifndef RESET
+#  define RESET ONE
+# endif
+
+# ifndef NORMAL_OP
+#  define NORMAL_OP ZERO
+# endif
 
 struct	s_client
 {
@@ -35,7 +49,6 @@ struct	s_client
 	bool					finished;
 	volatile sig_atomic_t	zero_received;
 	volatile sig_atomic_t	one_received;
-	int						i;
 	int						end_confirmations;
 } ;
 
@@ -50,5 +63,4 @@ struct	s_server
 	struct sigaction	act;
 } ;
 
-#include "stdio.h"
-#include <unistd.h>
+#endif

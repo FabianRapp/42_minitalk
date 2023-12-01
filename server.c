@@ -6,7 +6,7 @@
 /*   By: frapp <frapp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/06 00:21:54 by frapp             #+#    #+#             */
-/*   Updated: 2023/12/01 06:34:45 by frapp            ###   ########.fr       */
+/*   Updated: 2023/12/01 07:26:01 by frapp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,6 +102,7 @@ void	catch_binary(int sig)
 
 void	reset_connection(int sig, siginfo_t *siginfo, void *context)
 {
+	(void) context;
 	g_vars.client_id = siginfo->si_pid;
 	if (g_vars.zero_count >= 8)
 	{
@@ -120,7 +121,6 @@ void	reset_connection(int sig, siginfo_t *siginfo, void *context)
 	{
 		g_vars.zero_count = 0;
 		kill(g_vars.client_id, RESET);
-		return ;
 	}
 	else if (sig == ZERO)
 	{
@@ -134,7 +134,7 @@ int	main(void)
 	pid_t	id;
 
 	id = getpid();
-	printf("%d\n", id);
+	ft_printf("%d\n", id);
 	g_vars.zero_count = 0;
 	g_vars.both_count = 0;
 	g_vars.i = 0;

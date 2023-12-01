@@ -6,7 +6,7 @@
 /*   By: frapp <frapp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/14 17:12:34 by frapp             #+#    #+#             */
-/*   Updated: 2023/11/26 23:27:18 by frapp            ###   ########.fr       */
+/*   Updated: 2023/12/01 07:06:44 by frapp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,8 @@ char	*reading(t_file	*file)
 	{
 		if (!(file->buffer1_chars))
 		{
-			(file->buffer1_chars) = read(file->fd, file->buffer, GET_NEXT_LINE_BUFFER_SIZE);
+			(file->buffer1_chars) = read
+				(file->fd, file->buffer, GET_NEXT_LINE_BUFFER_SIZE);
 			file->buffer1_i = 0;
 			if ((file->buffer1_chars) < 0)
 			{

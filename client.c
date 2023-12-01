@@ -6,13 +6,13 @@
 /*   By: frapp <frapp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/06 00:53:33 by frapp             #+#    #+#             */
-/*   Updated: 2023/12/01 05:46:17 by frapp            ###   ########.fr       */
+/*   Updated: 2023/12/01 07:22:19 by frapp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk.h"
 
-struct s_client	g_vars = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,};
+struct s_client	g_vars = {0, {}, 0, 0, 0, 0, 0, 0, 0, 0,};
 
 //void	end_msg(void);
 void	end_msg(int sig);
@@ -31,23 +31,10 @@ void	first_answer(int signum)
 		g_vars.one_received = 1;
 	}
 }
-// has race condition but never happens and brings performence
 
-	// bool	one;
-	// if (0x80 & *(str))
-	// {
-	// 	one = true; 
-	// }
-	// else
-	// {
-	// 	one = false;
-	// }
-	// if (one)
-	// 	kill(server_id, ONE);
-	// else
-	// 	kill(server_id, ZERO);
 void	send_data_bin(int sig)
 {
+	sig++;
 	if (0x80 & *(g_vars.str))
 		kill(g_vars.server_id, ONE);
 	else
@@ -67,7 +54,6 @@ void	send_data_bin(int sig)
 			sigaction(ZERO, &g_vars.act, NULL);
 			return ;
 		}
-		//g_vars.i++;
 	}
 }
 
@@ -91,7 +77,6 @@ void	end_msg(int sig)
 
 void	reset_connection(void)
 {
-	g_vars.i = 0;
 	g_vars.zero_received = 0;
 	g_vars.one_received = 0;
 	sigemptyset(&(g_vars.act.sa_mask));
@@ -112,7 +97,7 @@ int	main(int ac, char *av[])
 {
 	if (ac != 3)
 	{
-		printf("wrong ac!\n");
+		ft_printf("wrong ac!\n");
 		return (0);
 	}
 	g_vars.server_id = atoi(av[1]);
