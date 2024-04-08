@@ -6,7 +6,7 @@
 /*   By: frapp <frapp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/06 00:21:54 by frapp             #+#    #+#             */
-/*   Updated: 2023/12/01 07:26:01 by frapp            ###   ########.fr       */
+/*   Updated: 2024/04/08 22:46:44 by frapp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,12 +109,12 @@ void	reset_connection(int sig, siginfo_t *siginfo, void *context)
 		sigemptyset(&(g_vars.act.sa_mask));
 		g_vars.act.sa_flags = 0;
 		g_vars.act.sa_handler = catch_binary;
-		sigaction(ONE, &g_vars.act, NULL);
-		sigaction(ZERO, &g_vars.act, NULL);
 		g_vars.zero_count = 0;
 		g_vars.both_count = 0;
 		g_vars.cmp = 0x80;
 		g_vars.i = 0;
+		sigaction(ONE, &g_vars.act, NULL);
+		sigaction(ZERO, &g_vars.act, NULL);
 		kill(g_vars.client_id, NORMAL_OP);
 	}
 	else if (sig == ONE)
@@ -152,7 +152,7 @@ int	main(void)
 	return (0);
 }
 
-		// sigset_t	set;
+	// sigset_t	set;
 
 	// sigemptyset(&set);
 	// test = signal(2, )
